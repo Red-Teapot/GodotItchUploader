@@ -2,8 +2,6 @@
 extends Control
 class_name PathPicker
 
-signal path_changed(path)
-
 @export var path: String : set = _set_path
 
 @onready var _path_edit := $"PathEdit"
@@ -14,7 +12,6 @@ func _set_path(value):
 		return
 		
 	path = value
-	emit_signal("path_changed", value)
 
 func _on_path_edit_text_changed(new_text):
 	path = new_text

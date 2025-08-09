@@ -6,7 +6,7 @@
 [node name="UploadModal" type="Window"]
 title = "Export and Upload Project to Itch"
 initial_position = 2
-size = Vector2i(600, 556)
+size = Vector2i(600, 300)
 wrap_controls = true
 transient = true
 popup_window = true
@@ -40,11 +40,12 @@ layout_mode = 2
 text = "Butler path:"
 
 [node name="ButlerPathPicker" parent="VBoxContainer/GridContainer" instance=ExtResource("2_rgav1")]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="PathEdit" parent="VBoxContainer/GridContainer/ButlerPathPicker" index="0"]
-placeholder_text = "butler"
+placeholder_text = "Auto detect"
 
 [node name="FileDialog" parent="VBoxContainer/GridContainer/ButlerPathPicker" index="2"]
 title = "Open a File"
@@ -55,13 +56,9 @@ layout_mode = 2
 text = "Export presets:"
 
 [node name="ExportPresetsContainer" type="VBoxContainer" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="CheckBox" type="CheckBox" parent="VBoxContainer/GridContainer/ExportPresetsContainer"]
-layout_mode = 2
-button_pressed = true
-text = "Foo"
 
 [node name="ButtonsContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -76,6 +73,7 @@ layout_mode = 2
 text = "Cancel"
 
 [node name="ButlerErrorDialog" type="AcceptDialog" parent="."]
+unique_name_in_owner = true
 title = "Incorrect Butler Executable"
 initial_position = 2
 size = Vector2i(300, 132)
@@ -85,7 +83,7 @@ dialog_text = "The provided file does not exist or is not a valid Butler executa
 dialog_autowrap = true
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
-[connection signal="path_changed" from="VBoxContainer/GridContainer/ButlerPathPicker" to="." method="_on_butler_path_picker_path_changed"]
+[connection signal="pressed" from="VBoxContainer/ButtonsContainer/UploadButton" to="." method="_on_upload_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonsContainer/CancelButton" to="." method="_on_close_requested"]
 
 [editable path="VBoxContainer/GridContainer/ButlerPathPicker"]

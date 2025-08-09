@@ -6,12 +6,6 @@ const SETTINGS_TAB_NAME := "itch_uploader"
 const ITCH_PAGE_URL_FIELD := "itch_page_url"
 
 var ITCH_PAGE_URL_REGEX := RegEx.new()
-const ITCH_CHANNELS := {
-	"Web": "web",
-	"Windows Desktop": "windows",
-	"macOS": "macos",
-	"Linux": "linux",
-}
 
 const UPLOAD_MODAL_RE := preload("res://addons/itch_uploader/upload_modal/upload_modal.tscn")
 
@@ -38,16 +32,15 @@ func _get_setting(field: String) -> String:
 	return "{0}/{1}".format([SETTINGS_TAB_NAME, field])
 
 func _export_and_upload():
+	var export_presets := _read_export_presets()
+	
 	var modal := UPLOAD_MODAL_RE.instantiate()
 	modal.theme = EditorInterface.get_editor_theme()
+	modal.export_presets = export_presets
 	EditorInterface.popup_dialog_centered(modal)
 	
 	return
-	var export_presets := ConfigFile.new()
-	var error := export_presets.load("res://export_presets.cfg")
-	if error:
-		printerr(error)
-		return
+	
 		
 	var itch_page_url_match := ITCH_PAGE_URL_REGEX.search(ProjectSettings.get_setting(_get_setting(ITCH_PAGE_URL_FIELD), ""))
 	if not itch_page_url_match:
@@ -55,6 +48,76 @@ func _export_and_upload():
 		return
 	var itch_user := itch_page_url_match.get_string("user")
 	var itch_game := itch_page_url_match.get_string("game")
+	
+	#for section in export_presets.get_sections():
+		#if not section.begins_with("preset."):
+			#continue
+		#if section.ends_with(".options"):
+			#continue
+		#
+		#var is_runnable = export_presets.get_value(section, "runnable", false)
+		#if not is_runnable:
+			#continue
+		#
+		#var platform = export_presets.get_value(section, "platform")
+		#if not platform or platform not in ITCH_CHANNELS:
+			#continue
+		#
+		#var preset_name := export_presets.get_value(section, "name")
+		#var itch_channel: String = ITCH_CHANNELS[platform]
+		#
+		#print("Exporting channel ", itch_channel)
+		#
+		#var godot_pid := OS.create_instance([
+			#"--headless",
+			#"--export-release",
+			#preset_name,
+		#])
+		#if godot_pid < 0:
+			#printerr("Could not run Godot")
+			#continue
+		#while OS.is_process_running(godot_pid):
+			#OS.delay_msec(1000)
+		#var godot_exit_code := OS.get_process_exit_code(godot_pid)
+		#if godot_exit_code != 0:
+			#printerr("Running Godot export failed")
+			#continue
+		#
+		#print("Pushing channel ", itch_channel)
+		#
+		#var butler_pid := OS.create_process(
+			#"butler",
+			#[
+				#"push",
+				#".export/" + itch_channel,
+				#"{0}/{1}:{2}".format([itch_user, itch_game, itch_channel]),
+			#],
+		#)
+		#if butler_pid < 0:
+			#printerr("Could not run Butler")
+			#continue
+		#while OS.is_process_running(butler_pid):
+			#OS.delay_msec(1000)
+		#var butler_exit_code := OS.get_process_exit_code(butler_pid)
+		#if butler_exit_code != 0:
+			#printerr("Running Butler push failed")
+			#continue
+
+const ITCH_CHANNELS := {
+	"Web": "web",
+	"Windows Desktop": "windows",
+	"macOS": "macos",
+	"Linux": "linux",
+}
+
+func _read_export_presets() -> Array[ExportPreset]:
+	var export_presets := ConfigFile.new()
+	var error := export_presets.load("res://export_presets.cfg")
+	if error != OK:
+		printerr(error)
+		return []
+	
+	var presets: Array[ExportPreset] = []
 	
 	for section in export_presets.get_sections():
 		if not section.begins_with("preset."):
@@ -70,42 +133,11 @@ func _export_and_upload():
 		if not platform or platform not in ITCH_CHANNELS:
 			continue
 		
-		var preset_name := export_presets.get_value(section, "name")
-		var itch_channel: String = ITCH_CHANNELS[platform]
-		
-		print("Exporting channel ", itch_channel)
-		
-		var godot_pid := OS.create_instance([
-			"--headless",
-			"--export-release",
-			preset_name,
-		])
-		if godot_pid < 0:
-			printerr("Could not run Godot")
-			continue
-		while OS.is_process_running(godot_pid):
-			OS.delay_msec(1000)
-		var godot_exit_code := OS.get_process_exit_code(godot_pid)
-		if godot_exit_code != 0:
-			printerr("Running Godot export failed")
-			continue
-		
-		print("Pushing channel ", itch_channel)
-		
-		var butler_pid := OS.create_process(
-			"butler",
-			[
-				"push",
-				".export/" + itch_channel,
-				"{0}/{1}:{2}".format([itch_user, itch_game, itch_channel]),
-			],
-		)
-		if butler_pid < 0:
-			printerr("Could not run Butler")
-			continue
-		while OS.is_process_running(butler_pid):
-			OS.delay_msec(1000)
-		var butler_exit_code := OS.get_process_exit_code(butler_pid)
-		if butler_exit_code != 0:
-			printerr("Running Butler push failed")
-			continue
+		presets.append(ExportPreset.new(
+			export_presets.get_value(section, "name"),
+			platform,
+			export_presets.get_value(section, "export_path"),
+			ITCH_CHANNELS[platform],
+		))
+	
+	return presets

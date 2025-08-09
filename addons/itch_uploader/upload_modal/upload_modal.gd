@@ -1,14 +1,24 @@
 @tool
 extends Window
 
-@onready var _butler_error_dialog := $"ButlerErrorDialog"
+var export_presets: Array[ExportPreset] = []
+
+@onready var _butler_path_picker := %"ButlerPathPicker"
+@onready var _butler_error_dialog := %"ButlerErrorDialog"
+@onready var _export_preset_container := %"ExportPresetsContainer"
+
+var _export_preset_checkboxes: Dictionary[ExportPreset, CheckBox] = {}
+
+func _ready():
+	for preset in export_presets:
+		var checkbox := CheckBox.new()
+		checkbox.text = preset.name
+		checkbox.button_pressed = true
+		_export_preset_checkboxes[preset] = checkbox
+		_export_preset_container.add_child(checkbox)
 
 func _on_close_requested():
 	queue_free()
-
-func _on_butler_path_picker_path_changed(path):
-	if not _is_butler_executable_valid(path):
-		_butler_error_dialog.visible = true
 
 func _is_butler_executable_valid(path: String) -> bool:
 	var output: Array[String] = []
@@ -25,3 +35,15 @@ func _is_butler_executable_valid(path: String) -> bool:
 		return false
 	
 	return true
+
+func _on_upload_button_pressed():
+	var butler_path: String = _butler_path_picker.path
+	if butler_path.is_empty():
+		# Maybe it's in PATH
+		butler_path = "butler"
+	
+	if not _is_butler_executable_valid(butler_path):
+		_butler_error_dialog.visible = true
+		return
+	
+	queue_free()
