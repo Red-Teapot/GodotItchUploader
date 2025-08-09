@@ -1,0 +1,36 @@
+[gd_scene load_steps=2 format=3 uid="uid://cov6r768i8og5"]
+
+[ext_resource type="Script" uid="uid://bl85hu6varjxa" path="res://addons/itch_uploader/path_picker/path_picker.gd" id="1_627xt"]
+
+[node name="PathPicker" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -498.0
+offset_bottom = -617.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_627xt")
+
+[node name="PathEdit" type="LineEdit" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+emoji_menu_enabled = false
+clear_button_enabled = true
+select_all_on_focus = true
+
+[node name="ChooseButton" type="Button" parent="."]
+custom_minimum_size = Vector2(90, 30)
+layout_mode = 2
+text = "Choose..."
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Select Butler Location"
+size = Vector2i(659, 360)
+ok_button_text = "Select"
+file_mode = 0
+access = 2
+
+[connection signal="text_changed" from="PathEdit" to="." method="_on_path_edit_text_changed"]
+[connection signal="pressed" from="ChooseButton" to="." method="_on_choose_button_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

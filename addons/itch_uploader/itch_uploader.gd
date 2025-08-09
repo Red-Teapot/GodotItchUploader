@@ -4,7 +4,6 @@ extends EditorPlugin
 const TOOL_MENU_ITEM_NAME := "Export & Upload to Itch"
 const SETTINGS_TAB_NAME := "itch_uploader"
 const ITCH_PAGE_URL_FIELD := "itch_page_url"
-const BUTLER_EXE_FIELD := "butler_executable"
 
 var ITCH_PAGE_URL_REGEX := RegEx.new()
 const ITCH_CHANNELS := {
@@ -13,6 +12,8 @@ const ITCH_CHANNELS := {
 	"macOS": "macos",
 	"Linux": "linux",
 }
+
+const UPLOAD_MODAL_RE := preload("res://addons/itch_uploader/upload_modal/upload_modal.tscn")
 
 func _enter_tree():
 	ITCH_PAGE_URL_REGEX.compile("^https://(?<user>[a-zA-Z0-9_-]+)\\.itch\\.io/(?<game>[a-zA-Z0-9_-]+)$")
@@ -28,26 +29,20 @@ func _enter_tree():
 		"hint": PROPERTY_HINT_PLACEHOLDER_TEXT,
 		"hint_string": "https://user.itch.io/game",
 	})
-	
-	ProjectSettings.set(_get_setting(BUTLER_EXE_FIELD), "")
-	ProjectSettings.set_as_basic(_get_setting(BUTLER_EXE_FIELD), true)
-	ProjectSettings.set_initial_value(_get_setting(BUTLER_EXE_FIELD), "")
-	ProjectSettings.add_property_info({
-		"name": _get_setting(BUTLER_EXE_FIELD),
-		"type": TYPE_STRING,
-		"hint": PROPERTY_HINT_GLOBAL_FILE,
-		"hint_string": null,
-	})
 
 func _exit_tree():
 	remove_tool_menu_item(TOOL_MENU_ITEM_NAME)
 	ProjectSettings.set("{0}/{1}".format([SETTINGS_TAB_NAME, ITCH_PAGE_URL_FIELD]), null)
-	ProjectSettings.set("{0}/{1}".format([SETTINGS_TAB_NAME, BUTLER_EXE_FIELD]), null)
 
 func _get_setting(field: String) -> String:
 	return "{0}/{1}".format([SETTINGS_TAB_NAME, field])
 
 func _export_and_upload():
+	var modal := UPLOAD_MODAL_RE.instantiate()
+	modal.theme = EditorInterface.get_editor_theme()
+	EditorInterface.popup_dialog_centered(modal)
+	
+	return
 	var export_presets := ConfigFile.new()
 	var error := export_presets.load("res://export_presets.cfg")
 	if error:

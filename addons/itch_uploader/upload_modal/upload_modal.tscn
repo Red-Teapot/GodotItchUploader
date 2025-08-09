@@ -1,0 +1,91 @@
+[gd_scene load_steps=3 format=3 uid="uid://b46ot7mrxlnks"]
+
+[ext_resource type="Script" uid="uid://ipal322soltq" path="res://addons/itch_uploader/upload_modal/upload_modal.gd" id="1_f00t1"]
+[ext_resource type="PackedScene" uid="uid://cov6r768i8og5" path="res://addons/itch_uploader/path_picker/path_picker.tscn" id="2_rgav1"]
+
+[node name="UploadModal" type="Window"]
+title = "Export and Upload Project to Itch"
+initial_position = 2
+size = Vector2i(600, 556)
+wrap_controls = true
+transient = true
+popup_window = true
+min_size = Vector2i(600, 300)
+script = ExtResource("1_f00t1")
+
+[node name="BackgroundPanel" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 2
+
+[node name="ButlerPathLabel" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Butler path:"
+
+[node name="ButlerPathPicker" parent="VBoxContainer/GridContainer" instance=ExtResource("2_rgav1")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PathEdit" parent="VBoxContainer/GridContainer/ButlerPathPicker" index="0"]
+placeholder_text = "butler"
+
+[node name="FileDialog" parent="VBoxContainer/GridContainer/ButlerPathPicker" index="2"]
+title = "Open a File"
+ok_button_text = "Open"
+
+[node name="ExportPresetsLabel" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Export presets:"
+
+[node name="ExportPresetsContainer" type="VBoxContainer" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CheckBox" type="CheckBox" parent="VBoxContainer/GridContainer/ExportPresetsContainer"]
+layout_mode = 2
+button_pressed = true
+text = "Foo"
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="UploadButton" type="Button" parent="VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+text = "Export and Upload"
+
+[node name="CancelButton" type="Button" parent="VBoxContainer/ButtonsContainer"]
+layout_mode = 2
+text = "Cancel"
+
+[node name="ButlerErrorDialog" type="AcceptDialog" parent="."]
+title = "Incorrect Butler Executable"
+initial_position = 2
+size = Vector2i(300, 132)
+popup_window = true
+min_size = Vector2i(300, 0)
+dialog_text = "The provided file does not exist or is not a valid Butler executable. Please choose a different one."
+dialog_autowrap = true
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="path_changed" from="VBoxContainer/GridContainer/ButlerPathPicker" to="." method="_on_butler_path_picker_path_changed"]
+[connection signal="pressed" from="VBoxContainer/ButtonsContainer/CancelButton" to="." method="_on_close_requested"]
+
+[editable path="VBoxContainer/GridContainer/ButlerPathPicker"]
