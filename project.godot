@@ -20,7 +20,7 @@ enabled=PackedStringArray("res://addons/itch_uploader/plugin.cfg")
 
 [itch_uploader]
 
-itch_page_url="https://redteapot.itch.io/test"
+itch_page_url="https://redteapot.itch.io/tests"
 
 [rendering]
 

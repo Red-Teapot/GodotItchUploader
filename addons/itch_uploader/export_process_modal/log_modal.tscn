@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3 uid="uid://brtnbthe2mkky"]
+
+[ext_resource type="Script" uid="uid://d3see772ji4un" path="res://addons/itch_uploader/export_process_modal/log_modal.gd" id="1_c3psv"]
+
+[node name="LogModal" type="Window"]
+initial_position = 2
+size = Vector2i(400, 300)
+transient = true
+exclusive = true
+popup_window = true
+min_size = Vector2i(400, 300)
+script = ExtResource("1_c3psv")
+
+[node name="BackgroundPanel" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LogText" type="RichTextLabel" parent="ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 2
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+tab_size = 2
+context_menu_enabled = true
+selection_enabled = true
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]

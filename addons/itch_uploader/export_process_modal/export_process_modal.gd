@@ -7,8 +7,10 @@ var export_presets: Array[ExportPreset]
 var butler_path: String
 
 const PROCESS_ENTRY_RES := preload("res://addons/itch_uploader/export_process_modal/export_process_entry.tscn")
+const LOG_MODAL_RES := preload("res://addons/itch_uploader/export_process_modal/log_modal.tscn")
 
 @onready var _process_entry_container := %"ProcessEntryContainer"
+@onready var _ok_button := %"OkButton"
 
 var _itch_page_url_regex := RegEx.new()
 var _itch_user: String
@@ -41,9 +43,12 @@ func _enter_tree():
 	_itch_project = page_match.get_string("project")
 
 func _ready():
+	_ok_button.disabled = true
+	
 	for preset in export_presets:
 		var process_entry := PROCESS_ENTRY_RES.instantiate()
 		process_entry.label = preset.name
+		process_entry.connect("log_requested", self._on_log_requested.bind(preset))
 		_process_entries[preset] = process_entry
 		_process_entry_container.add_child(process_entry)
 		process_entry.state = ExportProcessEntry.State.WAITING
@@ -52,7 +57,21 @@ func _ready():
 	if result != OK:
 		printerr("Could not start the thread")
 
+func _on_log_requested(preset: ExportPreset):
+	if preset not in _logs:
+		return
+	
+	print("Log requested for " + preset.name)
+	
+	var modal := LOG_MODAL_RES.instantiate()
+	modal.log = _logs[preset]
+	add_child(modal)
+	modal.show()
+
 func _on_close_requested():
+	if _thread.is_alive():
+		return
+	
 	_thread.wait_to_finish()
 	queue_free()
 
@@ -65,9 +84,9 @@ func _run_export():
 		if result == OK:
 			_process_entries[preset].call_deferred("set_state", ExportProcessEntry.State.SUCCESS)
 		else:
-			for line in _logs[preset]:
-				printerr(line)
 			_process_entries[preset].call_deferred("set_state", ExportProcessEntry.State.ERROR)
+	
+	_ok_button.call_deferred("set_disabled", false)
 
 func _export_preset(preset: ExportPreset) -> Error:
 	var output: Array[String] = []

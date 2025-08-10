@@ -136,3 +136,5 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "View Log"
+
+[connection signal="pressed" from="ButtonContainer/ViewLogButton" to="." method="emit_signal" binds= ["log_requested"]]

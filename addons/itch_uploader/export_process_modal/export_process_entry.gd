@@ -2,6 +2,8 @@
 extends Control
 class_name ExportProcessEntry
 
+signal log_requested
+
 @export var label: String
 @export var state := State.WAITING : set = set_state
 
