@@ -1,0 +1,1 @@
+addons/itch_uploader/README.md
