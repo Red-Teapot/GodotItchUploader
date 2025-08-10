@@ -57,6 +57,10 @@ func _ready():
 	if result != OK:
 		printerr("Could not start the thread")
 
+func _exit_tree():
+	if _thread.is_started():
+		_thread.wait_to_finish()
+
 func _on_log_requested(preset: ExportPreset):
 	if preset not in _logs:
 		return
@@ -71,8 +75,6 @@ func _on_log_requested(preset: ExportPreset):
 func _on_close_requested():
 	if _thread.is_alive():
 		return
-	
-	_thread.wait_to_finish()
 	queue_free()
 
 func _run_export():
