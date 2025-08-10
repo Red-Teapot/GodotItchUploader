@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://b46ot7mrxlnks"]
 
-[ext_resource type="Script" uid="uid://ipal322soltq" path="res://addons/itch_uploader/upload_modal/upload_modal.gd" id="1_f00t1"]
-[ext_resource type="PackedScene" uid="uid://cov6r768i8og5" path="res://addons/itch_uploader/path_picker/path_picker.tscn" id="2_rgav1"]
+[ext_resource type="Script" uid="uid://ipal322soltq" path="res://addons/itch_uploader/export_settings_modal/export_settings_modal.gd" id="1_fv8v2"]
+[ext_resource type="PackedScene" uid="uid://cov6r768i8og5" path="res://addons/itch_uploader/path_picker/path_picker.tscn" id="2_rtaq1"]
 
 [node name="UploadModal" type="Window"]
 title = "Export and Upload Project to Itch"
@@ -11,7 +11,7 @@ wrap_controls = true
 transient = true
 popup_window = true
 min_size = Vector2i(600, 300)
-script = ExtResource("1_f00t1")
+script = ExtResource("1_fv8v2")
 
 [node name="BackgroundPanel" type="Panel" parent="."]
 anchors_preset = 15
@@ -39,17 +39,13 @@ columns = 2
 layout_mode = 2
 text = "Butler path:"
 
-[node name="ButlerPathPicker" parent="VBoxContainer/GridContainer" instance=ExtResource("2_rgav1")]
+[node name="ButlerPathPicker" parent="VBoxContainer/GridContainer" instance=ExtResource("2_rtaq1")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="PathEdit" parent="VBoxContainer/GridContainer/ButlerPathPicker" index="0"]
 placeholder_text = "Auto detect"
-
-[node name="FileDialog" parent="VBoxContainer/GridContainer/ButlerPathPicker" index="2"]
-title = "Open a File"
-ok_button_text = "Open"
 
 [node name="ExportPresetsLabel" type="Label" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
@@ -81,6 +77,12 @@ popup_window = true
 min_size = Vector2i(300, 0)
 dialog_text = "The provided file does not exist or is not a valid Butler executable. Please choose a different one."
 dialog_autowrap = true
+
+[node name="NoPresetsDialog" type="AcceptDialog" parent="."]
+unique_name_in_owner = true
+size = Vector2i(248, 100)
+popup_window = true
+dialog_text = "No presets selected to export!"
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="pressed" from="VBoxContainer/ButtonsContainer/UploadButton" to="." method="_on_upload_button_pressed"]

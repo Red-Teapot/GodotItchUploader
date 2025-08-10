@@ -12,6 +12,7 @@ func _set_path(value):
 		return
 		
 	path = value
+	_path_edit.text = value
 
 func _on_path_edit_text_changed(new_text):
 	path = new_text

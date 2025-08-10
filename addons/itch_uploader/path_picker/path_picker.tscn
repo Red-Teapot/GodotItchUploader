@@ -25,9 +25,9 @@ layout_mode = 2
 text = "Choose..."
 
 [node name="FileDialog" type="FileDialog" parent="."]
-title = "Select Butler Location"
+title = "Open a File"
 size = Vector2i(659, 360)
-ok_button_text = "Select"
+ok_button_text = "Open"
 file_mode = 0
 access = 2
 

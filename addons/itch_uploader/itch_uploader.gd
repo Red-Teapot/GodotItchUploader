@@ -1,13 +1,13 @@
 @tool
 extends EditorPlugin
 
-const TOOL_MENU_ITEM_NAME := "Export & Upload to Itch"
+const TOOL_MENU_ITEM_NAME := "Export and Upload to Itch"
 const SETTINGS_TAB_NAME := "itch_uploader"
 const ITCH_PAGE_URL_FIELD := "itch_page_url"
 
 var ITCH_PAGE_URL_REGEX := RegEx.new()
 
-const UPLOAD_MODAL_RE := preload("res://addons/itch_uploader/upload_modal/upload_modal.tscn")
+const EXPORT_SETTINGS_MODAL_RES := preload("res://addons/itch_uploader/export_settings_modal/export_settings_modal.tscn")
 
 func _enter_tree():
 	ITCH_PAGE_URL_REGEX.compile("^https://(?<user>[a-zA-Z0-9_-]+)\\.itch\\.io/(?<game>[a-zA-Z0-9_-]+)$")
@@ -34,14 +34,13 @@ func _get_setting(field: String) -> String:
 func _export_and_upload():
 	var export_presets := _read_export_presets()
 	
-	var modal := UPLOAD_MODAL_RE.instantiate()
+	var modal := EXPORT_SETTINGS_MODAL_RES.instantiate()
 	modal.theme = EditorInterface.get_editor_theme()
 	modal.export_presets = export_presets
 	EditorInterface.popup_dialog_centered(modal)
 	
 	return
 	
-		
 	var itch_page_url_match := ITCH_PAGE_URL_REGEX.search(ProjectSettings.get_setting(_get_setting(ITCH_PAGE_URL_FIELD), ""))
 	if not itch_page_url_match:
 		printerr("Invalid Itch page URL")

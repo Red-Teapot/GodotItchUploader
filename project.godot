@@ -18,10 +18,6 @@ config/features=PackedStringArray("4.4", "GL Compatibility")
 
 enabled=PackedStringArray("res://addons/itch_uploader/plugin.cfg")
 
-[itch_uploader]
-
-itch_page_url="https://redteapot.itch.io/test"
-
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
