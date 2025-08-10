@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cov6r768i8og5"]
+[gd_scene load_steps=3 format=3 uid="uid://cov6r768i8og5"]
 
 [ext_resource type="Script" uid="uid://bl85hu6varjxa" path="res://addons/itch_uploader/path_picker/path_picker.gd" id="1_627xt"]
+[ext_resource type="Texture2D" uid="uid://dqato4qt1n0tv" path="res://addons/itch_uploader/icons/FileBrowse.svg" id="2_ahn8e"]
 
 [node name="PathPicker" type="HBoxContainer"]
 anchors_preset = 15
@@ -20,9 +21,11 @@ clear_button_enabled = true
 select_all_on_focus = true
 
 [node name="ChooseButton" type="Button" parent="."]
-custom_minimum_size = Vector2(90, 30)
+custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-text = "Choose..."
+icon = ExtResource("2_ahn8e")
+icon_alignment = 1
+expand_icon = true
 
 [node name="FileDialog" type="FileDialog" parent="."]
 title = "Open a File"

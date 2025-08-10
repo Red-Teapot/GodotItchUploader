@@ -3,12 +3,13 @@
 [ext_resource type="Script" uid="uid://ipal322soltq" path="res://addons/itch_uploader/export_settings_modal/export_settings_modal.gd" id="1_fv8v2"]
 [ext_resource type="PackedScene" uid="uid://cov6r768i8og5" path="res://addons/itch_uploader/path_picker/path_picker.tscn" id="2_rtaq1"]
 
-[node name="UploadModal" type="Window"]
+[node name="ExportSettingsModal" type="Window"]
 title = "Export and Upload Project to Itch"
 initial_position = 2
 size = Vector2i(600, 300)
 wrap_controls = true
 transient = true
+exclusive = true
 popup_window = true
 min_size = Vector2i(600, 300)
 script = ExtResource("1_fv8v2")

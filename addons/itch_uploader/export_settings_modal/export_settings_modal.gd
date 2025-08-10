@@ -1,5 +1,8 @@
 @tool
 extends Window
+class_name ExportSettingsModal
+
+signal export_accepted(selected_export_presets: Array[ExportPreset], butler_path: String)
 
 var export_presets: Array[ExportPreset] = []
 
@@ -12,8 +15,12 @@ var _export_preset_checkboxes: Dictionary[ExportPreset, CheckBox] = {}
 
 const BUTLER_SETTINGS_FILE := "addons/itch_uploader/butler.cfg"
 var _butler_settings := ConfigFile.new()
+const DEFAULT_BUTLER_PATH := "butler"
 
 func _ready():
+	if is_part_of_edited_scene():
+		return
+	
 	_butler_path_picker.path = _read_butler_executable()
 	
 	for preset in export_presets:
@@ -26,9 +33,43 @@ func _ready():
 func _on_close_requested():
 	queue_free()
 
+func _on_upload_button_pressed():
+	var butler_path: String = _butler_path_picker.path
+	
+	if not _is_butler_executable_valid(butler_path):
+		_butler_error_dialog.show()
+		return
+	
+	_save_butler_executable(butler_path)
+	
+	var selected_export_presets: Array[ExportPreset] = []
+	for preset in export_presets:
+		if preset not in _export_preset_checkboxes:
+			continue
+			
+		var checkbox := _export_preset_checkboxes[preset]
+		if not checkbox.button_pressed:
+			continue
+		
+		selected_export_presets.append(preset)
+	
+	if selected_export_presets.is_empty():
+		_no_presets_dialog.show()
+		return
+		
+	hide()
+	
+	emit_signal(
+		"export_accepted", 
+		selected_export_presets, 
+		butler_path if not butler_path.is_empty() else DEFAULT_BUTLER_PATH,
+	)
+	
+	queue_free()
+
 func _is_butler_executable_valid(path: String) -> bool:
 	if path.is_empty():
-		path = "butler"
+		path = DEFAULT_BUTLER_PATH
 		
 	var output: Array[String] = []
 	var result := OS.execute(path, ["--help"], output, true, false)
@@ -44,32 +85,6 @@ func _is_butler_executable_valid(path: String) -> bool:
 		return false
 	
 	return true
-
-func _on_upload_button_pressed():
-	var butler_path: String = _butler_path_picker.path
-	
-	if not _is_butler_executable_valid(butler_path):
-		_butler_error_dialog.show()
-		return
-	
-	_save_butler_executable(butler_path)
-	
-	var export_presets_to_export: Array[ExportPreset] = []
-	for preset in export_presets:
-		if preset not in _export_preset_checkboxes:
-			continue
-			
-		var checkbox := _export_preset_checkboxes[preset]
-		if not checkbox.button_pressed:
-			continue
-		
-		export_presets_to_export.append(preset)
-	
-	if export_presets_to_export.is_empty():
-		_no_presets_dialog.show()
-		return
-	
-	queue_free()
 
 func _read_butler_executable() -> String:
 	_butler_settings.clear()
