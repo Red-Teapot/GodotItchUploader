@@ -2,7 +2,7 @@
 
 This addon allows automatically exporting and uploading your project to [Itch.io](https://itch.io/) using [Butler](https://itch.io/docs/butler/).
 
-**NOTE: This is a work-in-progress.** While this addon should functional, it may contain bugs. It's highly recommended to back up your project before using this addon.
+**NOTE: This is a work-in-progress.** While this addon should be functional, it may contain bugs. It's highly recommended to back up your project before using this addon. If you encounter any problems, feel free to [create an issue](https://github.com/Red-Teapot/GodotItchUploader/issues).
 
 Made by humans, for humans.
 
