@@ -19,6 +19,7 @@ var _itch_project: String
 var _process_entries: Dictionary[ExportPreset, ExportProcessEntry] = {}
 var _logs: Dictionary[ExportPreset, Array] = {}
 var _thread := Thread.new()
+var _dir_access := DirAccess.open('.')
 
 func _enter_tree():
 	if is_part_of_edited_scene():
@@ -92,6 +93,12 @@ func _run_export():
 
 func _export_preset(preset: ExportPreset) -> Error:
 	var output: Array[String] = []
+	
+	var export_dir := preset.path.get_base_dir()
+	if not _dir_access.dir_exists(export_dir):
+		var make_dir_result := _dir_access.make_dir_recursive(export_dir)
+		if make_dir_result != OK:
+			output.append("Could not create export dir: " + error_string(make_dir_result))
 	
 	var godot_path := OS.get_executable_path()
 	var godot_args := [
