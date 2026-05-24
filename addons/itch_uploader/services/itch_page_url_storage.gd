@@ -5,25 +5,26 @@ class_name ItchPageUrlStorage
 const SETTING := "itch_page_url"
 const EXAMPLE := "https://user.itch.io/game"
 
+var _full_setting_name := ItchUploader.get_setting_name(SETTING)
 var _itch_page_url_regex := RegEx.new()
 
 func _init() -> void:
 	_itch_page_url_regex.compile("^https://(?<user>[a-zA-Z0-9_-]+)\\.itch\\.io/(?<project>[a-zA-Z0-9_-]+)$")
 
 func register_project_settings():
-	if not ProjectSettings.has_setting(ItchUploader.get_setting_name(SETTING)):
-		ProjectSettings.set(ItchUploader.get_setting_name(SETTING), "")
-	ProjectSettings.set_as_basic(ItchUploader.get_setting_name(SETTING), true)
-	ProjectSettings.set_initial_value(ItchUploader.get_setting_name(SETTING), "")
+	if not ProjectSettings.has_setting(_full_setting_name):
+		ProjectSettings.set(_full_setting_name, "")
+	ProjectSettings.set_as_basic(_full_setting_name, true)
+	ProjectSettings.set_initial_value(_full_setting_name, "")
 	ProjectSettings.add_property_info({
-		"name": ItchUploader.get_setting_name(SETTING),
+		"name": _full_setting_name,
 		"type": TYPE_STRING,
 		"hint": PROPERTY_HINT_PLACEHOLDER_TEXT,
 		"hint_string": EXAMPLE,
 	})
 
 func unregister_project_settings():
-	ProjectSettings.set(ItchUploader.get_setting_name(SETTING), null)
+	ProjectSettings.set(_full_setting_name, null)
 
 func get_page_info() -> ItchPageInfo:
 	var value := get_raw_value()
