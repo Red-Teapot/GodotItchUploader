@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bl85hu6varjxa" path="res://addons/itch_uploader/ui/path_picker/path_picker.gd" id="1_627xt"]
 [ext_resource type="Texture2D" uid="uid://dqato4qt1n0tv" path="res://addons/itch_uploader/ui/icons/FileBrowse.svg" id="2_ahn8e"]
 
-[node name="PathPicker" type="HBoxContainer"]
+[node name="PathPicker" type="HBoxContainer" unique_id=1215840379]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -13,21 +13,21 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_627xt")
 
-[node name="PathEdit" type="LineEdit" parent="."]
+[node name="PathEdit" type="LineEdit" parent="." unique_id=499450518]
 layout_mode = 2
 size_flags_horizontal = 3
 emoji_menu_enabled = false
 clear_button_enabled = true
 select_all_on_focus = true
 
-[node name="ChooseButton" type="Button" parent="."]
+[node name="ChooseButton" type="Button" parent="." unique_id=349128125]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 icon = ExtResource("2_ahn8e")
 icon_alignment = 1
 expand_icon = true
 
-[node name="FileDialog" type="FileDialog" parent="."]
+[node name="FileDialog" type="FileDialog" parent="." unique_id=1622518368]
 title = "Open a File"
 size = Vector2i(659, 360)
 ok_button_text = "Open"

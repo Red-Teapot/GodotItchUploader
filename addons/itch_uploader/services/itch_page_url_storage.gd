@@ -11,19 +11,19 @@ func _init() -> void:
 	_itch_page_url_regex.compile("^https://(?<user>[a-zA-Z0-9_-]+)\\.itch\\.io/(?<project>[a-zA-Z0-9_-]+)$")
 
 func register_project_settings():
-	if not ProjectSettings.has_setting(ItchUploader.get_setting(SETTING)):
-		ProjectSettings.set(ItchUploader.get_setting(SETTING), "")
-	ProjectSettings.set_as_basic(ItchUploader.get_setting(SETTING), true)
-	ProjectSettings.set_initial_value(ItchUploader.get_setting(SETTING), "")
+	if not ProjectSettings.has_setting(ItchUploader.get_setting_name(SETTING)):
+		ProjectSettings.set(ItchUploader.get_setting_name(SETTING), "")
+	ProjectSettings.set_as_basic(ItchUploader.get_setting_name(SETTING), true)
+	ProjectSettings.set_initial_value(ItchUploader.get_setting_name(SETTING), "")
 	ProjectSettings.add_property_info({
-		"name": ItchUploader.get_setting(SETTING),
+		"name": ItchUploader.get_setting_name(SETTING),
 		"type": TYPE_STRING,
 		"hint": PROPERTY_HINT_PLACEHOLDER_TEXT,
 		"hint_string": EXAMPLE,
 	})
 
 func unregister_project_settings():
-	ProjectSettings.set(ItchUploader.get_setting(SETTING), null)
+	ProjectSettings.set(ItchUploader.get_setting_name(SETTING), null)
 
 func get_page_info() -> ItchPageInfo:
 	var value := get_raw_value()
@@ -42,7 +42,7 @@ func get_page_info() -> ItchPageInfo:
 	)
 
 func get_raw_value() -> String:
-	return ProjectSettings.get_setting(ItchUploader.get_setting(SETTING))
+	return ProjectSettings.get_setting(ItchUploader.get_setting_name(SETTING))
 
 func get_example() -> String:
 	return EXAMPLE

@@ -3,8 +3,8 @@ extends Window
 class_name ExportProcessModal
 
 var itch_page_url_storage: ItchPageUrlStorage
+var project_exporter: ProjectExporter
 var export_presets: Array[ExportPreset]
-var butler_path: String
 
 const PROCESS_ENTRY_RES := preload("res://addons/itch_uploader/ui/export_process_modal/export_process_entry.tscn")
 const LOG_MODAL_RES := preload("res://addons/itch_uploader/ui/export_process_modal/log_modal.tscn")
@@ -16,7 +16,6 @@ var _page_info: ItchPageInfo = null
 var _process_entries: Dictionary[ExportPreset, ExportProcessEntry] = {}
 var _logs: Dictionary[ExportPreset, Array] = {}
 var _thread := Thread.new()
-var _dir_access := DirAccess.open('.')
 
 func _enter_tree():
 	if is_part_of_edited_scene():
@@ -50,7 +49,7 @@ func _ready():
 	
 	var result := _thread.start(self._run_export)
 	if result != OK:
-		printerr("Could not start the thread")
+		push_error("Could not start the thread")
 
 func _exit_tree():
 	if _thread.is_started():
@@ -59,8 +58,6 @@ func _exit_tree():
 func _on_log_requested(preset: ExportPreset):
 	if preset not in _logs:
 		return
-	
-	print("Log requested for " + preset.name)
 	
 	var modal := LOG_MODAL_RES.instantiate()
 	modal.log = _logs[preset]
@@ -76,7 +73,10 @@ func _run_export():
 	for preset in export_presets:
 		_process_entries[preset].call_deferred("set_state", ExportProcessEntry.State.IN_PROGRESS)
 		
-		var result := _export_preset(preset)
+		var log: Array[String] = []
+		_logs[preset] = log
+		
+		var result := project_exporter.export_preset(preset, log)
 		
 		if result == OK:
 			_process_entries[preset].call_deferred("set_state", ExportProcessEntry.State.SUCCESS)
@@ -84,61 +84,3 @@ func _run_export():
 			_process_entries[preset].call_deferred("set_state", ExportProcessEntry.State.ERROR)
 	
 	_ok_button.call_deferred("set_disabled", false)
-
-func _export_preset(preset: ExportPreset) -> Error:
-	var output: Array[String] = []
-	
-	var export_dir := preset.path.get_base_dir()
-	if not _dir_access.dir_exists(export_dir):
-		var make_dir_result := _dir_access.make_dir_recursive(export_dir)
-		if make_dir_result != OK:
-			output.append("Could not create export dir: " + error_string(make_dir_result))
-	
-	var godot_path := OS.get_executable_path()
-	var godot_args := [
-		"--headless",
-		"--export-release",
-		preset.name,
-	]
-	output.append("Godot path: " + godot_path)
-	output.append("Godot args: " + str(godot_args))
-	var godot_result := OS.execute(
-		godot_path,
-		godot_args,
-		output,
-		true,
-		false,
-	)
-	if godot_result < 0:
-		_logs[preset] = output
-		return ERR_CANT_CREATE
-	elif godot_result > 0:
-		_logs[preset] = output
-		return FAILED
-	
-	var butler_args := [
-		"push",
-		preset.path.get_base_dir(),
-		"{0}/{1}:{2}".format([
-			_page_info.user,
-			_page_info.project,
-			preset.channel,
-		]),
-	]
-	output.append("Butler path: " + butler_path)
-	output.append("Butler args: " + str(butler_args))
-	var butler_result := OS.execute(
-		butler_path,
-		butler_args,
-		output,
-		true,
-		false,
-	)
-	if butler_result < 0:
-		_logs[preset] = output
-		return ERR_CANT_CREATE
-	elif butler_result > 0:
-		_logs[preset] = output
-		return FAILED
-	
-	return OK
