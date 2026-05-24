@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://s35fbyhsuob2"
-path="res://.godot/imported/StatusSuccess.svg-3a7518dd0e88a1f417915750bb48f789.ctex"
+uid="uid://bjs63filx04ml"
+path="res://.godot/imported/StatusWarning.svg-d00da4128c612ee339c883cdb9e43a8d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/itch_uploader/icons/StatusSuccess.svg"
-dest_files=["res://.godot/imported/StatusSuccess.svg-3a7518dd0e88a1f417915750bb48f789.ctex"]
+source_file="res://addons/itch_uploader/ui/icons/StatusWarning.svg"
+dest_files=["res://.godot/imported/StatusWarning.svg-d00da4128c612ee339c883cdb9e43a8d.ctex"]
 
 [params]
 

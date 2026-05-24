@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dqato4qt1n0tv"
-path="res://.godot/imported/FileBrowse.svg-f8ab38ab7df95f2edefdbc86e8f192c0.ctex"
+uid="uid://d37rv8d38lkk2"
+path="res://.godot/imported/Progress6.svg-fdea61570cddc808e8427a8414fc8220.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/itch_uploader/icons/FileBrowse.svg"
-dest_files=["res://.godot/imported/FileBrowse.svg-f8ab38ab7df95f2edefdbc86e8f192c0.ctex"]
+source_file="res://addons/itch_uploader/ui/icons/Progress6.svg"
+dest_files=["res://.godot/imported/Progress6.svg-fdea61570cddc808e8427a8414fc8220.ctex"]
 
 [params]
 

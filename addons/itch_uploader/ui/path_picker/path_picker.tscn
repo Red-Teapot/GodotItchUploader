@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://cov6r768i8og5"]
+[gd_scene format=3 uid="uid://cov6r768i8og5"]
 
-[ext_resource type="Script" uid="uid://bl85hu6varjxa" path="res://addons/itch_uploader/path_picker/path_picker.gd" id="1_627xt"]
-[ext_resource type="Texture2D" uid="uid://dqato4qt1n0tv" path="res://addons/itch_uploader/icons/FileBrowse.svg" id="2_ahn8e"]
+[ext_resource type="Script" uid="uid://bl85hu6varjxa" path="res://addons/itch_uploader/ui/path_picker/path_picker.gd" id="1_627xt"]
+[ext_resource type="Texture2D" uid="uid://dqato4qt1n0tv" path="res://addons/itch_uploader/ui/icons/FileBrowse.svg" id="2_ahn8e"]
 
 [node name="PathPicker" type="HBoxContainer"]
 anchors_preset = 15

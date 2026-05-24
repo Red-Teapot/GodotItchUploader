@@ -2,20 +2,17 @@
 extends Window
 class_name ExportProcessModal
 
-var itch_page_url: String
+var itch_page_url_storage: ItchPageUrlStorage
 var export_presets: Array[ExportPreset]
 var butler_path: String
 
-const PROCESS_ENTRY_RES := preload("res://addons/itch_uploader/export_process_modal/export_process_entry.tscn")
-const LOG_MODAL_RES := preload("res://addons/itch_uploader/export_process_modal/log_modal.tscn")
+const PROCESS_ENTRY_RES := preload("res://addons/itch_uploader/ui/export_process_modal/export_process_entry.tscn")
+const LOG_MODAL_RES := preload("res://addons/itch_uploader/ui/export_process_modal/log_modal.tscn")
 
 @onready var _process_entry_container := %"ProcessEntryContainer"
 @onready var _ok_button := %"OkButton"
 
-var _itch_page_url_regex := RegEx.new()
-var _itch_user: String
-var _itch_project: String
-
+var _page_info: ItchPageInfo = null
 var _process_entries: Dictionary[ExportPreset, ExportProcessEntry] = {}
 var _logs: Dictionary[ExportPreset, Array] = {}
 var _thread := Thread.new()
@@ -24,24 +21,21 @@ var _dir_access := DirAccess.open('.')
 func _enter_tree():
 	if is_part_of_edited_scene():
 		return
-		
-	_itch_page_url_regex.compile("^https://(?<user>[a-zA-Z0-9_-]+)\\.itch\\.io/(?<project>[a-zA-Z0-9_-]+)$")
-	var page_match := _itch_page_url_regex.search(itch_page_url)
-	if not page_match:
+	
+	_page_info = itch_page_url_storage.get_page_info()
+	
+	if not _page_info:
 		hide()
 		queue_free()
 		
 		var error_dialog := AcceptDialog.new()
 		error_dialog.title = "Incorrect Itch Page URL"
 		error_dialog.dialog_text = "Incorrect Itch page URL: '{0}'. It should look like this: '{1}'.".format([
-			itch_page_url,
-			ItchUploader.ITCH_PAGE_URL_EXAMPLE,
+			itch_page_url_storage.get_raw_value(),
+			itch_page_url_storage.get_example(),
 		])
 		EditorInterface.popup_dialog_centered(error_dialog)
 		return
-	
-	_itch_user = page_match.get_string("user")
-	_itch_project = page_match.get_string("project")
 
 func _ready():
 	_ok_button.disabled = true
@@ -126,8 +120,8 @@ func _export_preset(preset: ExportPreset) -> Error:
 		"push",
 		preset.path.get_base_dir(),
 		"{0}/{1}:{2}".format([
-			_itch_user,
-			_itch_project,
+			_page_info.user,
+			_page_info.project,
 			preset.channel,
 		]),
 	]

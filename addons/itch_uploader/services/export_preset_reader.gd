@@ -2,6 +2,7 @@
 extends RefCounted
 class_name ExportPresetReader
 
+# Godot platform to Itch channel map
 const ITCH_CHANNELS := {
 	"Web": "web",
 	"Windows Desktop": "windows",
@@ -13,14 +14,14 @@ func read_export_presets() -> Array[ExportPreset]:
 	var export_presets := ConfigFile.new()
 	var error := export_presets.load("res://export_presets.cfg")
 	if error != OK:
-		printerr(error_string(error))
+		push_error("Could not load export_presets.cfg: " + error_string(error))
 		return []
 	
 	var godot_version := Engine.get_version_info()
 	var godot_version_number: int = godot_version.hex
 	
-	if godot_version_number < 0x040000:
-		printerr("Unsupported Godot version: " + godot_version.string)
+	if godot_version_number < 0x040400:
+		push_error("Unsupported Godot version: " + godot_version.string)
 		return []
 	elif godot_version_number < 0x040700:
 		return _parse_export_presets_pre_4_7(export_presets)
