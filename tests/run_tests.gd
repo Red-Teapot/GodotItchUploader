@@ -2,6 +2,7 @@ extends SceneTree
 
 const TESTS := [
 	"res://tests/test_export_preset_reader.gd",
+	"res://tests/test_project_exporter.gd",
 ]
 
 func _init() -> void:
@@ -15,35 +16,33 @@ func _init() -> void:
 		quit(1)
 		return
 
-	var has_failures := false
+	var test_results: Dictionary[String, Error] = {}
 
 	for test in TESTS:
 		print("Running test " + test)
 
-		var out_log: Array[String] = []
-		var godot_args := [
-			"--headless",
-			"--script",
-			test,
-		]
-		var godot_result := OS.execute(
-			godot_path,
-			godot_args,
-			out_log,
-			true,
-			false,
-		)
-
-		if godot_result == OK:
+		var test_script: GDScript = load(test)
+		var test_instance: Object = test_script.new()
+		
+		var test_result: Error = test_instance.test()
+		test_results[test] = test_result
+		
+		if test_result == OK:
 			print("Passed test " + test)
 		else:
-			has_failures = true
-			var message = "FAILED test " + test
-			message += "\nTEST LOG:"
-			for line in out_log:
-				message += "\n" + line
-			push_error(message)
+			push_error("Test " + test + " FAILED")
+		
+		test_instance.free()
 
+	print("\nTEST SUMMARY:")
+	
+	var has_failures := false
+	for test in test_results:
+		var result := test_results[test]
+		if result != OK:
+			has_failures = true
+		print(test + " - " + error_string(result))
+	
 	if has_failures:
 		quit(1)
 	else:

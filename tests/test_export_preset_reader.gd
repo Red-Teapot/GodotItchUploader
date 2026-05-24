@@ -1,12 +1,12 @@
-extends SceneTree
+extends Object
 
-func _init() -> void:
+func test() -> Error:
 	var reader := ExportPresetReader.new()
 
 	var read_presets := reader.read_export_presets()
-	
+
 	print_debug("Read presets: " + str(read_presets))
-	
+
 	var expected_presets := [
 		ExportPreset.new(
 			"Web",
@@ -33,14 +33,13 @@ func _init() -> void:
 			"macos",
 		),
 	]
-	
+
 	print_debug("Expected presets: " + str(expected_presets))
-	
+
 	if read_presets.size() != expected_presets.size():
 		push_error("Read and expected preset counts do not match")
-		quit(1)
-		return
-	
+		return FAILED
+
 	for read_preset in read_presets:
 		var found := false
 		for expected_preset in expected_presets:
@@ -48,7 +47,6 @@ func _init() -> void:
 				found = true
 		if not found:
 			push_error("Could not find export preset in expected list: " + str(read_preset))
-			quit(1)
-			return
-	
-	quit(0)
+			return FAILED
+
+	return OK
