@@ -31,4 +31,5 @@ jobs:
 
       - name: Run tests
         run: |
+          godot --headless --import
           godot --headless --script tests/run_tests.gd
