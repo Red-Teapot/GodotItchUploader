@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        godot: [4.4.0, 4.5.0, 4.6.0, 4.7-beta3]
+        godot: [4.4.0, 4.5.0, 4.6.0, 4.7.0-beta3]
     defaults:
       run:
         shell: bash
