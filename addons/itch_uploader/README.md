@@ -1,8 +1,10 @@
 # Godot Itch Uploader
 
-This addon allows automatically exporting and uploading your project to [Itch.io](https://itch.io/) using [Butler](https://itch.io/docs/butler/).
+[![Test](https://github.com/Red-Teapot/GodotItchUploader/actions/workflows/test.yml/badge.svg)](https://github.com/Red-Teapot/GodotItchUploader/actions/workflows/test.yml)
 
-**NOTE: This is a work-in-progress.** While this addon should be functional, it may contain bugs. It's highly recommended to back up your project before using this addon. If you encounter any problems, feel free to [create an issue](https://github.com/Red-Teapot/GodotItchUploader/issues).
+**Supported Godot versions:** 4.4 - 4.7 (inclusive)
+
+This addon allows automatically exporting and uploading your project to [Itch.io](https://itch.io/) using [Butler](https://itch.io/docs/butler/). This is mainly intended to save time and prevent publishing mistakes during game jams, but the addon can be used outside of jams too.
 
 Made by humans, for humans.
 
@@ -19,11 +21,17 @@ Made by humans, for humans.
    - For Linux, `.export/linux/game-name.x86_64`
    - For MacOS, `.export/macos/game-name.app`
 
-   Don't forget to add the `.export` folder to the `.gitignore` file.
+   Don't forget to add the `.export` folder to the `.gitignore` file. Also, make sure the presets you want to export are marked as runnable (which they are by default).
 
 6. Open the Project menu, then go to `Tools` -> `Export and Upload to Itch...`
 8. If you have Butler in your `PATH`, skip this step. Otherwise, specify the path to the Butler executable in the `Butler path` field. It will be saved, so you won't have to do it again.
 9. Select the export presets you want to export and click `Export and Upload`.
+
+# Version Control Notes
+
+By default, the saved Butler path is not committed to Git, because it's assumed to be specific to every machine. If you want to change this, remove the corresponding entry in `addons/itch_uploader/.gitignore`.
+
+The Itch.io page URL, on the contrary, is saved to project settings (`project.godot`) and commited to version control, because it's assumed to be specific to the entire project and this shareable. Currently there is no easy way to change this behavior.
 
 # License
 
