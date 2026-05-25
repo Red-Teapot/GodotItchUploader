@@ -48,6 +48,11 @@ func test() -> Error:
 		push_error("Failed to run project exporter")
 		return FAILED
 
+	print("Checking exported files")
+	if not dir_access.file_exists(".export/linux/dummy.x86_64"):
+		push_error("The exported file (.export/linux/dummy.x86_64) does not exist")
+		return FAILED
+
 	print("Validating mock Butler log")
 
 	var mock_butler_log_file := FileAccess.open(mock_butler_log, FileAccess.READ)
