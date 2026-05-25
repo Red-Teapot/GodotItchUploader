@@ -5,6 +5,7 @@ jobs:
   tests:
     name: Run tests on ${{matrix.os}}, Godot ${{matrix.godot}}
     runs-on: ${{matrix.os}}
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
