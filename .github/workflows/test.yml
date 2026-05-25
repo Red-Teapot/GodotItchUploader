@@ -1,0 +1,33 @@
+name: Test
+on: push
+
+jobs:
+  tests:
+    name: Run tests on ${{matrix.os}}, Godot ${{matrix.godot}}
+    runs-on: ${{matrix.os}}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        godot: [4.4.0, 4.5.0, 4.6.0]
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          filter: tree:0
+          fetch-depth: 0
+
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: ${{matrix.godot}}
+          use-dotnet: false
+          include-templates: true
+
+      - name: Run tests
+        run: |
+          godot --headless --script tests/run_tests.gd
