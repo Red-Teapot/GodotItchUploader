@@ -3,6 +3,8 @@ setlocal enabledelayedexpansion
 
 for %%i in ("%~dp0") do set "SCRIPT_DIR=%%~fi"
 set "LOG=%SCRIPT_DIR%\butler.log"
+set "SOURCE=%2"
+set "TARGET=%3"
 
 echo Log file: %LOG%
 
@@ -12,8 +14,6 @@ if "%1"=="--help" (
 )
 
 if "%1"=="push" (
-    set "SOURCE=%2"
-    set "TARGET=%3"
     echo SUCCESS: Push called, source=%SOURCE%, target=%TARGET% >> "%LOG%"
     exit /b 0
 )
