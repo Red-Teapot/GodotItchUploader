@@ -21,4 +21,5 @@ offset_right = 45.5
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
-text = "Hello World"
+text = "If you found this, please report it here: https://github.com/Red-Teapot/GodotItchUploader
+This is a test scene for the Itch.io Exporter & Uploader addon and should not appear in your project"
