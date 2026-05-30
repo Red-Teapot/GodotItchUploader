@@ -23,6 +23,8 @@ Made by humans, for humans.
 
    Don't forget to add the `.export` folder to the `.gitignore` file. Also, make sure the presets you want to export are marked as runnable (which they are by default).
 
+   Also, you might want to exclude this addon from the exports (by adding the `addons/itch_uploader` folder to the exluded files field in the Resources tab of an export preset settings).
+
 6. Open the Project menu, then go to `Tools` -> `Export and Upload to Itch...`
 8. If you have Butler in your `PATH`, skip this step. Otherwise, specify the path to the Butler executable in the `Butler path` field. It will be saved, so you won't have to do it again.
 9. Select the export presets you want to export and click `Export and Upload`.
