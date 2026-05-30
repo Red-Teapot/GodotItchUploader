@@ -24,17 +24,9 @@ func _enter_tree():
 	_page_info = itch_page_url_storage.get_page_info()
 	
 	if not _page_info:
+		push_error("Page info is null")
 		hide()
 		queue_free()
-		
-		var error_dialog := AcceptDialog.new()
-		error_dialog.title = "Incorrect Itch Page URL"
-		error_dialog.dialog_text = "Incorrect Itch page URL: '{0}'. It should look like this: '{1}'.".format([
-			itch_page_url_storage.get_raw_value(),
-			itch_page_url_storage.get_example(),
-		])
-		EditorInterface.popup_dialog_centered(error_dialog)
-		return
 
 func _ready():
 	_ok_button.disabled = true

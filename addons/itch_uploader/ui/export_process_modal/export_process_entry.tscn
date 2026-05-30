@@ -45,17 +45,17 @@ animations = [{
 "speed": 10.0
 }]
 
-[node name="ExportProcessEntry" type="HBoxContainer"]
+[node name="ExportProcessEntry" type="HBoxContainer" unique_id=1672603196]
 custom_minimum_size = Vector2(0, 32)
 offset_right = 256.0
 offset_bottom = 32.0
 script = ExtResource("1_omh2a")
 
-[node name="IconContainer" type="Control" parent="."]
+[node name="IconContainer" type="Control" parent="." unique_id=744942586]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 
-[node name="SuccessStatusIcon" type="TextureRect" parent="IconContainer"]
+[node name="SuccessStatusIcon" type="TextureRect" parent="IconContainer" unique_id=2068431685]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -69,7 +69,7 @@ texture = ExtResource("1_vplol")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ErrorStatusIcon" type="TextureRect" parent="IconContainer"]
+[node name="ErrorStatusIcon" type="TextureRect" parent="IconContainer" unique_id=1252949916]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -83,7 +83,7 @@ texture = ExtResource("2_rtpra")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="CanceledStatusIcon" type="TextureRect" parent="IconContainer"]
+[node name="CanceledStatusIcon" type="TextureRect" parent="IconContainer" unique_id=1950471019]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -97,7 +97,7 @@ texture = ExtResource("3_5pwgu")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="InProgressStatusIcon" type="Control" parent="IconContainer"]
+[node name="InProgressStatusIcon" type="Control" parent="IconContainer" unique_id=1672833050]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -109,24 +109,24 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="InProgressStatusIconSprite" type="AnimatedSprite2D" parent="IconContainer/InProgressStatusIcon"]
+[node name="InProgressStatusIconSprite" type="AnimatedSprite2D" parent="IconContainer/InProgressStatusIcon" unique_id=78934445]
 unique_name_in_owner = true
 scale = Vector2(0.75, 0.75)
 sprite_frames = SubResource("SpriteFrames_dvn53")
 autoplay = "default"
 frame_progress = 0.514903
 
-[node name="ExportPresetNameLabel" type="Label" parent="."]
+[node name="ExportPresetNameLabel" type="Label" parent="." unique_id=280658378]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "???"
 
-[node name="ButtonContainer" type="Control" parent="."]
+[node name="ButtonContainer" type="Control" parent="." unique_id=1167571972]
 custom_minimum_size = Vector2(88, 0)
 layout_mode = 2
 
-[node name="ViewLogButton" type="Button" parent="ButtonContainer"]
+[node name="ViewLogButton" type="Button" parent="ButtonContainer" unique_id=580451077]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1

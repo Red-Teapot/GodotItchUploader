@@ -37,6 +37,29 @@ func _open_export_settings_modal():
 	EditorInterface.popup_dialog_centered(_export_settings_modal)
 
 func _start_export(selected_export_presets: Array[ExportPreset]):
+	var error_messages := []
+	
+	if _itch_page_url_storage.get_page_info() == null:
+		error_messages.append(
+			"The Itch.io page URL is incorrect. It should look like this: {0}. Please check your project settings."
+				.format([_itch_page_url_storage.get_example()])
+		)
+		
+	if not _butler_runner.is_butler_executable_valid(_butler_runner.read_butler_executable()):
+		error_messages.append(
+			"The Butler path is incorrect. Please choose a correct Butler executable path and try again."
+		)
+	
+	if not error_messages.is_empty():
+		var error_dialog := AcceptDialog.new()
+		error_dialog.title = "Export errors"
+		var message := ""
+		for error in error_messages:
+			message += error + "\n\n"
+		error_dialog.dialog_text = message
+		EditorInterface.popup_dialog_centered(error_dialog)
+		return
+	
 	_export_process_modal = EXPORT_PROCESS_MODAL_RES.instantiate()
 	_export_process_modal.theme = EditorInterface.get_editor_theme()
 	_export_process_modal.project_exporter = _project_exporter
