@@ -14,7 +14,7 @@ const LOG_MODAL_RES := preload("res://addons/itch_uploader/ui/export_process_mod
 
 var _page_info: ItchPageInfo = null
 var _process_entries: Dictionary[ExportPreset, ExportProcessEntry] = {}
-var _logs: Dictionary[ExportPreset, Array] = {}
+var _logs: Dictionary[ExportPreset, LogCollector] = {}
 var _thread := Thread.new()
 
 func _enter_tree():
@@ -65,10 +65,12 @@ func _run_export():
 	for preset in export_presets:
 		_process_entries[preset].call_deferred("set_state", ExportProcessEntry.State.IN_PROGRESS)
 		
+		_logs[preset] = LogCollector.new()
 		var log: Array[String] = []
-		_logs[preset] = log
 		
 		var result := project_exporter.export_preset(preset, log)
+		
+		_logs[preset].add_lines(log)
 		
 		if result == OK:
 			_process_entries[preset].call_deferred("set_state", ExportProcessEntry.State.SUCCESS)

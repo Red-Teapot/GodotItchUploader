@@ -1,6 +1,7 @@
 extends SceneTree
 
 const TESTS := [
+	"res://tests/test_log_collector.gd",
 	"res://tests/test_export_preset_reader.gd",
 	"res://tests/test_project_exporter.gd",
 ]

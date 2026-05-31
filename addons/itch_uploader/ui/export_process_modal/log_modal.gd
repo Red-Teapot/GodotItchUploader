@@ -1,15 +1,16 @@
 @tool
 extends Window
 
-@export var log: Array[String] = []
+var log: LogCollector = null
 
 @onready var _log_text := %"LogText"
 
 func _ready():
-	_log_text.clear()
-	for entry in log:
-		_log_text.add_text(entry)
-		_log_text.newline()
+	if log:
+		_log_text.text = log.get_log()
+	else:
+		push_warning("Log modal opened with no log")
+		_log_text.text = ""
 
 func _on_close_requested():
 	queue_free()
