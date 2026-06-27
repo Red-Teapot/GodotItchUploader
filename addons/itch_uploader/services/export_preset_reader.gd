@@ -10,6 +10,8 @@ const ITCH_CHANNELS := {
 	"Linux": "linux",
 }
 
+var _dir_access := DirAccess.open('.')
+
 func read_export_presets() -> Array[ExportPreset]:
 	var export_presets := ConfigFile.new()
 	var error := export_presets.load("res://export_presets.cfg")
@@ -29,6 +31,8 @@ func read_export_presets() -> Array[ExportPreset]:
 		return _parse_export_presets_post_4_7(export_presets)
 
 func _parse_export_presets_pre_4_7(export_presets: ConfigFile) -> Array[ExportPreset]:
+	var project_dir := _dir_access.get_current_dir()
+	
 	var presets: Array[ExportPreset] = []
 	
 	for section in export_presets.get_sections():
@@ -45,16 +49,20 @@ func _parse_export_presets_pre_4_7(export_presets: ConfigFile) -> Array[ExportPr
 		if not platform or platform not in ITCH_CHANNELS:
 			continue
 		
+		var export_path = project_dir.path_join(export_presets.get_value(section, "export_path"))
+		
 		presets.append(ExportPreset.new(
 			export_presets.get_value(section, "name"),
 			platform,
-			export_presets.get_value(section, "export_path"),
+			export_path,
 			ITCH_CHANNELS[platform],
 		))
 	
 	return presets
 
 func _parse_export_presets_post_4_7(export_presets: ConfigFile) -> Array[ExportPreset]:
+	var project_dir := _dir_access.get_current_dir()
+	
 	var sections := export_presets.get_sections()
 	
 	var presets: Array[ExportPreset] = []
@@ -86,10 +94,12 @@ func _parse_export_presets_post_4_7(export_presets: ConfigFile) -> Array[ExportP
 		if not platform or platform not in ITCH_CHANNELS:
 			continue
 		
+		var export_path = project_dir.path_join(export_presets.get_value(section, "export_path"))
+		
 		presets.append(ExportPreset.new(
 			preset_name,
 			platform,
-			export_presets.get_value(section, "export_path"),
+			export_path,
 			ITCH_CHANNELS[platform],
 		))
 	
