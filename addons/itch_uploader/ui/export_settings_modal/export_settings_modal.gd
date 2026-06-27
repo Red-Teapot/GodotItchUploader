@@ -11,6 +11,7 @@ var butler_runner: ButlerRunner
 @onready var _butler_error_dialog := %"ButlerErrorDialog"
 @onready var _export_preset_container := %"ExportPresetsContainer"
 @onready var _no_presets_dialog := %"NoPresetsDialog"
+@onready var _export_preset_warning := %"ExportPathWarningContainer"
 
 var _export_preset_checkboxes: Dictionary[ExportPreset, CheckBox] = {}
 
@@ -26,6 +27,15 @@ func _ready():
 		checkbox.button_pressed = true
 		_export_preset_checkboxes[preset] = checkbox
 		_export_preset_container.add_child(checkbox)
+	
+	_export_preset_warning.visible = false
+	for index_1 in range(len(export_presets)):
+		for index_2 in range(index_1 + 1, len(export_presets)):
+			var export_dir_1 := export_presets[index_1].path.get_base_dir()
+			var export_dir_2 := export_presets[index_2].path.get_base_dir()
+			
+			if export_dir_1.begins_with(export_dir_2) or export_dir_2.begins_with(export_dir_1):
+				_export_preset_warning.visible = true
 
 func _on_close_requested():
 	queue_free()
