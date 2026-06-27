@@ -1,6 +1,8 @@
 extends Object
 
 func test() -> Error:
+	var current_dir := DirAccess.open('.').get_current_dir()
+
 	var reader := ExportPresetReader.new()
 
 	var read_presets := reader.read_export_presets()
@@ -11,25 +13,25 @@ func test() -> Error:
 		ExportPreset.new(
 			"Web",
 			"Web",
-			".export/web/index.html",
+			current_dir.path_join("/.export/web/index.html"),
 			"web",
 		),
 		ExportPreset.new(
 			"Windows Desktop",
 			"Windows Desktop",
-			".export/windows/dummy.exe",
+			current_dir.path_join("/.export/windows/dummy.exe"),
 			"windows",
 		),
 		ExportPreset.new(
 			"Linux",
 			"Linux",
-			".export/linux/dummy.x86_64",
+			current_dir.path_join("/.export/linux/dummy.x86_64"),
 			"linux",
 		),
 		ExportPreset.new(
 			"macOS",
 			"macOS",
-			".export/macos/dummy.app",
+			current_dir.path_join("/.export/macos/dummy.app"),
 			"macos",
 		),
 	]
