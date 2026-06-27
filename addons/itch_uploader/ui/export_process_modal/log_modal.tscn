@@ -50,7 +50,9 @@ selection_enabled = true
 
 [node name="ErrorTips" type="RichTextLabel" parent="BackgroundPanel/VBoxContainer" unique_id=733884711]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
+theme_override_colors/default_color = Color(1, 0.8666667, 0.39607844, 1)
 bbcode_enabled = true
 fit_content = true
 scroll_active = false
