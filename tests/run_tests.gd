@@ -57,8 +57,8 @@ func _swap_export_presets() -> Error:
 	var dest_path := "export_presets.cfg"
 
 	if not dir_access.file_exists(source_path):
-		push_warning("Export presets file " + source_path + " does not exist, using the default one")
-		return OK
+		push_error("Export presets file " + source_path + " does not exist")
+		return FAILED
 
 	var remove_result := dir_access.remove(dest_path)
 	if remove_result != OK:
