@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Setup Godot
-        uses: chickensoft-games/setup-godot@v2
+        uses: chickensoft-games/setup-godot@669df51f7f4c210f0b1d58fde5dd0a1b0f031c63
         with:
           version: ${{matrix.godot}}
           use-dotnet: false
